@@ -1,0 +1,214 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Aug 16 11:04:57 2017
+
+"""
+
+""" 
+4.1 Implement a function to check if a binary tree is balanced. For the 
+purposes of this question, a balanced tree is defined to be a tree such that 
+the heights of the two subtrees of any node never differ by more than one.
+"""
+
+""" find out the height of a tree first """
+
+def height(root):
+    """base case, height is 0 when root is None"""
+    if root == None:
+        return 0
+    return max(height(root.left), height(root.right)) + 1
+def isBalancedTree(root):
+    """ base case, root is NULL"""
+    if root == None:
+        return True
+    if abs(height(root.left) - height(root.right)) <= 1:
+        return isBalancedTree(root.left) and isBalancedTree(root.right)
+    else:
+        return False
+
+"""
+4.2 Given a directed graph, design an algorithm to find out whether there is a 
+route between two nodes.
+"""
+
+def findRoute(graph, node1, node2):
+    """ DFS, graph is a list of list """
+    visited = []
+    """ mark the visited nodes """
+    stack = [node1]
+    while stack:
+        node = stack.pop()
+        if node == node2:
+            return True
+        if node in visited:
+            continue
+        else:
+            visited.append(node)
+        """ push childen of node to stack """
+        for c in graph(node):
+            stack.append(c)
+    return False
+    
+"""
+4.3 Given a sorted (increasing order) array with unique integer elements, 
+write an algorithm to create a binary search tree with minimal height.
+"""
+
+def sortedArrayToBST(nums):
+    """ recursive """
+    n = len(nums)
+    if n == 0:
+        return None
+    if n ==1:
+        return TreeNode(nums[0])
+    root = TreeNode(nums[n/2])
+    root.left = sortedArrayToBST(nums[:n/2])
+    root.right = sortedArrayToBST(nums[n/2+1:])
+    return root
+
+"""
+4.4 Given a binary tree, design an algorithm which creates a linked list of all
+the nodes at each depth (e.g., if you have a tree with depth D, you'll have D 
+linked lists).
+"""
+
+def BTtoLinkedList(root):
+    if root == None:
+        return
+    res = []
+    q = [root]
+    prev = None
+    while q:
+        newQ = []
+        for root in q:
+            if prev is None:
+                prev = root
+                res.append(root)
+            else:
+                prev.right = root
+            if root.left:
+                newQ.append(root.left)
+            if root.right:
+                newQ.append(root.right)
+        q = newQ
+        prev = None 
+    return res
+
+"""
+4.5 Implement a function to check if a binary tree is a binary search tree.
+"""
+def isBST(root):
+    """ In order traverse """
+    s = []
+    res = []
+    while root or s:
+        if root:
+            s.append(root)
+            root = root.left
+        else:
+            root = s.pop()
+            res.append(root.val)
+            root = root.right
+    return res == sorted(res) and len(res) == len(set(res))
+    """res should be a sorted list of array without duplicate elements """
+    
+"""
+4.6 Write an algorithm to find the 'next'node (i.e., in-order successor) of a 
+given node in a binary search tree. You may assume that each node has a link 
+to its parent.
+"""
+
+def inOrderSuccessor(root, node):
+    succ = None
+    """ 
+    succ is a pointer that keeps possible successor, the searching process is 
+    similar as binary search
+    """
+    while root:
+        if node.val < root.val:
+            succ = root
+            root = root.left
+        else:
+            root = root.right 
+    return succ
+
+"""
+4.7 Design an algorithm and write code to find the first common ancestor of 
+two nodes in a binary tree. Avoid storing additional nodes in a data structure.
+NOTE: This is not necessarily a binary search tree.
+"""
+def firstCommonAncestor(root, p, q):
+    s = [root]
+    parent = {root:None}
+    while p not in parent or q not in parent:
+        """ find where are p and q """
+        node = s.pop()
+        if node.left:
+            parent[node.left] = node
+            s.append(node.left)
+        if node.right:
+            parent[node.right] = node
+            s.append(node.right)
+            
+    ancestors = set()
+    """ create a set of p's ancestors """
+    while p:
+        p = parent[p]
+        ancestors.add(p)
+    while q not in ancestors:
+        q = parent[q]
+        """ 
+        travel through q's ancestors and the first one appear in p's ancestors
+        is the answer
+        """     
+    return q
+
+"""
+4.8 You have two very large binary trees: T1, with millions of nodes, and T2, 
+with hundreds of nodes. Create an algorithm to decide if T2 is a subtree ofT1.
+A tree T2 is a subtree of T1 if there exists a node n in T1 such that the 
+subtree of n is identical to T2. That is, if you cut off the tree at node n, 
+the two trees would be identical.
+"""
+def identical(t, s):
+    if s is None and t is None:
+        return True
+    if s is None or t is None:
+        return False
+    """ base cases """
+    return s.val == t.val and identical(t.left, s.left) and \
+    identical(t.right, s.right)
+    """ if s and t are identical,then they are subtrees of each other """
+def subtree(t, s):
+    if s is None or t is None:
+        return True
+    """ base case """
+    if identical(t, s):
+        return True
+    return subtree(t.left, s) or subtree(t.right, s)
+
+"""
+4.9 You are given a binary tree in which each node contains a value. Design an
+algorithm to print all paths which sum to a given value. The path does not need 
+to start or end at the root or a leaf.
+"""
+
+def pathSum(root, sum):
+    if root == None:
+        return []
+    if root.left == None and root.right == None and root.val == sum:
+        return [[root.val]]
+    
+    temp = pathSum(root.left, sum) + pathSum(root.right, sum)
+    """ temp is a list of list """
+    return [[root.val] + i for i in temp]
+     
+
+            
+    
+
+
+
+
+    
