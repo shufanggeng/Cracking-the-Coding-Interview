@@ -194,15 +194,17 @@ algorithm to print all paths which sum to a given value. The path does not need
 to start or end at the root or a leaf.
 """
 
-def pathSum(root, sum):
-    if root == None:
+def pathSumHelper(root, target, paths):
+    if root is None :
         return []
-    if root.left == None and root.right == None and root.val == sum:
-        return [[root.val]]
-    
-    temp = pathSum(root.left, sum) + pathSum(root.right, sum)
-    """ temp is a list of list """
-    return [[root.val] + i for i in temp]
+    else :
+        paths = [[root.val]] + [x+[root.val] for x in paths]
+        return [x for x in paths if target == sum(x)] + \
+        pathSumHelper(root.left, target, paths) + \
+        pathSumHelper(root.right, target, paths)
+        
+def pathSum(root, target):
+    return pathSumHelper(root,target,[])
      
 
             
