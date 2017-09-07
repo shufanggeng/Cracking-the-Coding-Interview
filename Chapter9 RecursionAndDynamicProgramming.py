@@ -97,7 +97,7 @@ def magicIndex1(seq, start=None, end=None):
             leftEnd = min(mid-1, seq[mid])
             rightStart = max(mid+1, seq[mid])
             return magicIndex1(seq, start = start, end = leftEnd) + \
-                   magicIndex(seq, start = rightStart, end = end)
+                   magicIndex1(seq, start = rightStart, end = end)
      
 """
 9.4 Write a method to return all subsets of a set.
