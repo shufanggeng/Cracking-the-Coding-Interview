@@ -66,10 +66,8 @@ def deleteMiddleNode(head):
     """
     if not head or not head.next:
         return
-    cur = head
-    cur = cur.next
-    cur.val = cur.next.val
-    cur = cur.next.next
+    head.val = head.next.val
+    head.next = head.next.next
     
 """ 
 2.4 Write code to partition a linked list around a value x, such that all 
@@ -158,7 +156,7 @@ def palindrome(head):
     slow, fast = head, head.next
     while fast and fast.next:
         slow = slow.next
-        fast = fast.next
+        fast = fast.next.next
     """split the linked list to two parts """
     second = slow.next
     """ it is the end of the second linked list """
