@@ -96,8 +96,7 @@ def partitionLinkedList(head, x):
     """ join two linked lists """
     l1.next = h2.next 
     
-    return h1.ne
-xt
+    return h1.next
 
 """ 
 2.4 You have two numbers represented by a linked list, where each node 
