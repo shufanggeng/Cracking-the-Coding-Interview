@@ -10,15 +10,32 @@ Created on Fri Aug 11 14:44:01 2017
 How would you solve this problem if a temporary buffer is not allowed? 
 """
 
-def removeDuplicates(head):
+def removeDuplicate(head):
+    exist = set([head.val])
     cur = head
-    while cur and cur.next:
-        """ two pointers without temporary buffer"""
-        if cur.val == cur.next.val:
-            cur = cur.next.next
+    while cur.next:
+        if cur.next.val in exist:
+            cur.next = cur.next.next
         else:
             cur = cur.next
+            exist.add(cur.next.val)
     return head
+
+def removeDuplicateNoBuffer(head):
+    while head.next:
+        before_check = head
+        check = head.next
+    
+    while check and check.next:
+        if check.val == before_check.val:
+            before_check.next = check.next
+            check = check.next
+        else:
+            before_check = check
+            check = check.next
+            
+    head = head.next
+    
 
 """ 
 2.2 Implement an algorithm to find the kth to last element of a singly 
